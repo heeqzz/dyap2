@@ -1,0 +1,153 @@
+parent(vitalya, marry).
+parent(varya, marry).
+parent(vitalya, anya).
+parent(varya, anya).
+
+parent(anya,madina).
+parent(boris,madina).
+
+parent(bob, linda).
+parent(marry, linda).
+parent(bob, amanda).
+parent(marry, amanda).
+
+parent(amanda,alla).
+parent(sanya,alla).
+
+parent(vlad,madonna).
+parent(madina,madonna).
+
+parent(linda, peppa).
+parent(kolyan, peppa).
+parent(linda, rose).
+parent(kolyan, rose).
+
+parent(gorgh, angelina).
+parent(peppa, angelina).
+
+parent(angelina, natalie).
+parent(bred, natalie).
+
+parent(elizabeth, hasbulla).
+parent(richard, hasbulla).
+
+man(vitalya).
+man(bob).
+man(kolyan).
+man(gorgh).
+man(bred).
+man(richard).
+man(hasbulla).
+man(boris).
+man(sanya).
+man(vlad).
+
+woman(varya).
+woman(anya).
+woman(marry).
+woman(linda).
+woman(amanda).
+woman(peppa).
+woman(rose).
+woman(angelina).
+woman(elizabeth).
+woman(natalie).
+woman(madonna).
+woman(madina).
+woman(alla).
+
+married(vitalya, varya).
+married(bob, marry).
+married(kolyan, linda).
+married(gorgh, peppa).
+married(bred, angelina).
+married(richard, elizabeth).
+married(hasbulla, natalie).
+married(sanya,amanda).
+married(vlad,madina).
+married(anya,boris).
+
+
+sister(X, Y) :- parent(Z, X), parent(Z, Y), woman(X), woman(Y), not(X = Y).
+
+granddaughter(X, Y) :- parent(Y, Z), parent(Z, X), woman(X), not(X = Y).
+
+two_granddaughter(X, Y) :- parent(Y, Z), parent(Z, W), parent(W, F), parent(F, X), woman(X), not(X = Y).
+
+husband_father(X, Y) :- parent(X, Z), married(Z, Y), man(X), not(X = Y).
+
+second_cousin_aunt(X, Y) :- 
+	parent(Z, Y),          
+    parent(W1, Z),        
+    parent(W2, X),       
+    parent(V, W1),       
+    parent(V, W2),        
+    woman(X),
+	woman(Z),
+	woman(W1),
+	woman(W2),
+	woman(Y),
+	woman(V),
+	not(W1=V),
+	not(W2=Z),
+	not(parent(X,Y)),
+	not(parent(Y,X)),
+    not(X=Y). 
+	
+
+% Вспомогательные отношения
+sibling(X, Y) :-
+    parent(Z, X),
+    parent(Z, Y),
+    not(X = Y).
+
+n_cousin_aunt(X, Y, 1) :- 
+    parent(Z, Y),           
+    parent(W, X),          
+    parent(W, Z),          
+    woman(X),
+	woman(Y),
+	woman(Z),
+	woman(W),
+    X \= Z,               
+    X \= Y.               
+
+
+n_cousin_aunt(X, Y, 2) :-
+    parent(Z, Y),          
+    parent(W1, Z),        
+    parent(W2, X),       
+    parent(V, W1),       
+    parent(V, W2),        
+    woman(X),
+	woman(Z),
+	woman(W1),
+	woman(W2),
+	woman(Y),
+	woman(V),
+	not(W1=V),
+	not(W2=Z),
+	not(parent(X,Y)),
+	not(parent(Y,X)),
+    not(X=Y).              
+
+
+n_cousin_aunt(X, Y, 3) :-
+    parent(Z, Y),          
+    parent(W1, Z),        
+    parent(W2, X),        
+    parent(V1, W1),       
+    parent(V2, W2),        
+    parent(U, V1),         
+    parent(U, V2),         
+    woman(X),
+	woman(Y),
+	woman(Z),
+	woman(W1),
+	woman(W2),
+	woman(U),
+	woman(V2),
+	woman(V1),
+	not(X=Y),              
+	not(parent(X,Y)),
+	not(parent(Y,X)).
